@@ -1,4 +1,4 @@
-package com.mihai.whatmovies.adapter;
+package com.mihai.movies.adapter;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 
-import com.mihai.whatmovies.R;
+import com.mihai.movies.R;
 import com.squareup.picasso.Picasso;
 
 public class MyAdapter extends BaseAdapter {

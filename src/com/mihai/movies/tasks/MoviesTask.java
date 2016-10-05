@@ -1,4 +1,4 @@
-package com.mihai.tasks;
+package com.mihai.movies.tasks;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,20 +12,9 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.mihai.whatmovies.R;
-import com.mihai.whatmovies.adapter.MyAdapter;
-import com.squareup.picasso.Picasso;
-
+import com.mihai.movies.adapter.MyAdapter;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.text.GetChars;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageButton;
-
 public class MoviesTask extends AsyncTask<String, Void, String> {
 	private String moviesJsonData;
 	private ArrayList<String> pictureUrlList = new ArrayList<String>();
@@ -46,7 +35,7 @@ public class MoviesTask extends AsyncTask<String, Void, String> {
 		try {
 			
 			URL url = new URL(
-					"http://api.themoviedb.org/3/movie/popular?api_key=<your api key here>");
+					"http://api.themoviedb.org/3/movie/popular?api_key=<you api key here>");
 			HttpURLConnection connection = (HttpURLConnection) url
 					.openConnection();
 			connection.setRequestMethod("GET");
