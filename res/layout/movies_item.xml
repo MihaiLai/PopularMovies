@@ -6,9 +6,10 @@
     
 	<ImageButton
 	    android:id="@+id/movies_picture"
-	    android:layout_width="180dp"
-	    android:layout_height="180dp"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
 	    android:scaleType="centerCrop"
-	    android:background="#00000000" 
+	    android:background="#00000000"
+	    android:adjustViewBounds="true" 
 	    />
 </LinearLayout>
