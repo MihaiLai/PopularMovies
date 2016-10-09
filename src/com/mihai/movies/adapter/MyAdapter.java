@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.mihai.movies.R;
 import com.squareup.picasso.Picasso;
@@ -48,7 +49,7 @@ public class MyAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		convertView = LayoutInflater.from(context).inflate(
 				R.layout.movies_item, null);
-		ImageButton moviePicture = (ImageButton) convertView
+		ImageView moviePicture = (ImageView) convertView
 				.findViewById(R.id.movies_picture);
 		if (pictureUrlList != null) {
 			Picasso.with(context)

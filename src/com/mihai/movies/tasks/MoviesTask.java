@@ -12,31 +12,30 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.mihai.movies.adapter.MyAdapter;
-import android.content.Context;
+
+import com.mihai.movies.data.MovieData;
+
 import android.os.AsyncTask;
 public class MoviesTask extends AsyncTask<String, Void, String> {
 	private String moviesJsonData;
-	private ArrayList<String> pictureUrlList = new ArrayList<String>();
-	private Context context;
-	private MyAdapter adapter;
+	private ArrayList<MovieData> moviesDataList = new ArrayList<MovieData>();
+	
 	private onFinishListener listener;
 
-	public MoviesTask(Context context, MyAdapter adapter,
-			onFinishListener listener) {
-		this.context = context;
-		this.adapter = adapter;
+	public MoviesTask(onFinishListener listener) {
+
 		this.listener = listener;
 	}
 
 	@Override
 	protected String doInBackground(String... params) {
-		BufferedReader reader;
+		BufferedReader reader = null;
+		HttpURLConnection connection = null;
 		try {
 			
 			URL url = new URL(
-					"http://api.themoviedb.org/3/movie/popular?api_key=<you api key here>");
-			HttpURLConnection connection = (HttpURLConnection) url
+					"http://api.themoviedb.org/3/movie/popular?api_key=[your api key here]");
+			connection = (HttpURLConnection) url
 					.openConnection();
 			connection.setRequestMethod("GET");
 			connection.connect();
@@ -60,6 +59,18 @@ public class MoviesTask extends AsyncTask<String, Void, String> {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally{
+			if (connection != null) {
+				connection.disconnect();
+			}
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		return moviesJsonData;
 	}
@@ -70,8 +81,13 @@ public class MoviesTask extends AsyncTask<String, Void, String> {
 			JSONArray moviesArray = popMoviesJson.getJSONArray("results");
 			for (int i = 0; i < moviesArray.length(); i++) {
 				JSONObject movieObject = moviesArray.getJSONObject(i);
+				String movieTitle = movieObject.getString("title");
 				String moviePictureUrl = movieObject.getString("poster_path");
-				pictureUrlList.add(moviePictureUrl);
+				String overview = movieObject.getString("overview");
+				double voteAverage = movieObject.getDouble("vote_average");
+				MovieData movieData = new MovieData(movieTitle, moviePictureUrl, overview, voteAverage);
+				moviesDataList.add(movieData);
+				
 			}
 			// Log.d("TAG", pictureUrlList.toString());
 		} catch (JSONException e) {
@@ -85,12 +101,12 @@ public class MoviesTask extends AsyncTask<String, Void, String> {
 	protected void onPostExecute(String result) {
 		if (result != null & listener != null) {
 			//when finish loading data ,deliver it to adapter on MainActivity
-			listener.afterTaskFinish(pictureUrlList);
+			listener.afterTaskFinish(moviesDataList);
 		}
 	}
 
 	public interface onFinishListener {
-		public void afterTaskFinish(ArrayList<String> pictureUrlList);
+		public void afterTaskFinish(ArrayList<MovieData> moviesDataList);
 	}
 
 }
