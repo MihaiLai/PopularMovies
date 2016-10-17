@@ -1,12 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
      <TextView
-       android:id="@+id/movie_title"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="hello"
-       />
+         android:id="@+id/movie_title"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:background="@color/red"
+         android:textColor="@color/white"
+         android:paddingLeft="15dp"
+         android:paddingTop="30dp"
+         android:paddingBottom="15dp"
+         android:textSize="35sp"
+         android:text="Chappie" 
+         />
+     <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="200dp"
+         android:layout_marginLeft="10dp"
+         >
 
-</RelativeLayout>
+         <ImageView
+             android:id="@+id/movie_detial_picture"
+             android:layout_width="100dp"
+             android:layout_height="match_parent"
+             android:layout_alignParentLeft="true"
+             android:layout_margin="20dp"
+             android:src="@drawable/ic_launcher" />
+
+         <LinearLayout
+             android:layout_height="match_parent"
+             android:layout_width="wrap_content"
+             android:layout_toRightOf="@id/movie_detial_picture"
+             android:layout_margin="20dp"
+             android:orientation="vertical"
+             >
+             <TextView
+                 android:id="@+id/release_date"
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:textSize="20sp"
+                 android:layout_marginBottom="10dp"
+                 android:text="2016-9-9"
+                 />
+             <TextView
+                 android:id="@+id/vote_average"
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                  android:layout_marginBottom="10dp"
+                 android:text="6.0/10"
+                 />
+
+             <ImageView
+                 android:id="@+id/favorite"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginBottom="10dp"
+                 android:src="@drawable/fav_normal" />            
+         </LinearLayout>
+         
+     </RelativeLayout>
+	
+     <View
+         android:layout_margin="20dp"
+         style="@style/HorizontalDivider"
+         />
+     
+     <TextView
+         android:id="@+id/over_view_text"
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:textSize="15sp"
+         android:layout_margin="20dp"        
+         />
+     
+</LinearLayout>

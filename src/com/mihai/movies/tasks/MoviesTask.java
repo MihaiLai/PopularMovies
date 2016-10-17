@@ -34,7 +34,7 @@ public class MoviesTask extends AsyncTask<String, Void, String> {
 		try {
 			
 			URL url = new URL(
-					"http://api.themoviedb.org/3/movie/popular?api_key=[your api key here]");
+					"http://api.themoviedb.org/3/movie/popular?api_key=955f2bbe709669ee48ca28642355e6be");
 			connection = (HttpURLConnection) url
 					.openConnection();
 			connection.setRequestMethod("GET");
@@ -81,11 +81,12 @@ public class MoviesTask extends AsyncTask<String, Void, String> {
 			JSONArray moviesArray = popMoviesJson.getJSONArray("results");
 			for (int i = 0; i < moviesArray.length(); i++) {
 				JSONObject movieObject = moviesArray.getJSONObject(i);
-				String movieTitle = movieObject.getString("title");
-				String moviePictureUrl = movieObject.getString("poster_path");
-				String overview = movieObject.getString("overview");
-				double voteAverage = movieObject.getDouble("vote_average");
-				MovieData movieData = new MovieData(movieTitle, moviePictureUrl, overview, voteAverage);
+				MovieData movieData = new MovieData();
+				movieData.setMovieDate(movieObject.getString("release_date"));
+				movieData.setMovieTitle(movieObject.getString("title"));
+				movieData.setMoviePictureUrl(movieObject.getString("poster_path"));
+				movieData.setMovieOverview(movieObject.getString("overview"));
+				movieData.setVoteAverage(movieObject.getDouble("vote_average"));
 				moviesDataList.add(movieData);
 				
 			}

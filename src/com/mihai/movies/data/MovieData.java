@@ -8,6 +8,7 @@ public class MovieData implements Serializable{
 	private String movieTitle;
 	private String moviePictureUrl;
 	private String movieOverview;
+	private String movieDate;
 	private double voteAverage;
 	public MovieData(){
 		
@@ -41,6 +42,13 @@ public class MovieData implements Serializable{
 	}
 	public void setVoteAverage(double voteAverage) {
 		this.voteAverage = voteAverage;
+	}
+	
+	public String getMovieDate() {
+		return movieDate;
+	}
+	public void setMovieDate(String movieDate) {
+		this.movieDate = movieDate;
 	}
 	
 }

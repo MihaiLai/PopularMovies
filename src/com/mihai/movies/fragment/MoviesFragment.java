@@ -24,9 +24,11 @@ public class MoviesFragment extends Fragment {
 	private GridView gridView;
 	private ArrayList<MovieData> movieDataList;
 	public static final String MOVIE_TITLE = "title";
+	public static final String MOVIE_DATE = "release_date";
 	public static final String MOVIE_PICTURE_URL="poster_path";
 	public static final String OVERVIEW = "overview";
 	public static final String VOTE_AVERAGE= "vote_average";
+	public static final String MOVIE_BEAN= "moviedata";
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -59,17 +61,8 @@ public class MoviesFragment extends Fragment {
 					int position, long id) {
 				Intent i = new Intent(getActivity(), MovieDetailActivity.class);
 				if (movieDataList != null) {
-					MovieData movieData = movieDataList.get(position);
-					String movieTitle = movieData.getMovieTitle();
-					String moviePictureUrl = movieData.getMoviePictureUrl();
-					String movieOverview = movieData.getMovieOverview();
-					double voteAverage = movieData.getVoteAverage();
-					
-					//in order to transact information to movie detail  
-					i.putExtra(MoviesFragment.MOVIE_TITLE, movieTitle);
-					i.putExtra(MoviesFragment.MOVIE_PICTURE_URL, moviePictureUrl);
-					i.putExtra(MoviesFragment.OVERVIEW, movieOverview);
-					i.putExtra(MoviesFragment.VOTE_AVERAGE, voteAverage);
+					MovieData movieData = movieDataList.get(position);					
+					i.putExtra(MoviesFragment.MOVIE_BEAN, movieData);
 				}
 				startActivity(i);
 				
