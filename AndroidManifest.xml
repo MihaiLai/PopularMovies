@@ -27,6 +27,11 @@
             android:name=".activities.MovieDetailActivity"
             android:label="@string/detail_name"
             ></activity>
+        <provider 
+            android:name=".data.MoviesProvider"
+           	android:authorities="com.mihai.movies.proivder">
+            
+        </provider>
     </application>
 
 </manifest>

@@ -7,23 +7,22 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.mihai.movies.data.MovieData;
-
+import com.mihai.movies.data.MovieContract;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
 import android.os.AsyncTask;
+
 public class MoviesTask extends AsyncTask<String, Void, String> {
 	private String moviesJsonData;
-	private ArrayList<MovieData> moviesDataList = new ArrayList<MovieData>();
-	
+	private Context context;
 	private onFinishListener listener;
 
-	public MoviesTask(onFinishListener listener) {
-
+	public MoviesTask(Context context, onFinishListener listener) {
+		this.context = context;
 		this.listener = listener;
 	}
 
@@ -32,11 +31,10 @@ public class MoviesTask extends AsyncTask<String, Void, String> {
 		BufferedReader reader = null;
 		HttpURLConnection connection = null;
 		try {
-			
+
 			URL url = new URL(
 					"http://api.themoviedb.org/3/movie/popular?api_key=955f2bbe709669ee48ca28642355e6be");
-			connection = (HttpURLConnection) url
-					.openConnection();
+			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
 			connection.connect();
 			InputStream inputStream = connection.getInputStream();
@@ -59,7 +57,7 @@ public class MoviesTask extends AsyncTask<String, Void, String> {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
+		} finally {
 			if (connection != null) {
 				connection.disconnect();
 			}
@@ -77,20 +75,29 @@ public class MoviesTask extends AsyncTask<String, Void, String> {
 
 	public void getMoviesDataFromJson(String json) {
 		try {
+			ContentResolver contentResolver = context.getContentResolver();
 			JSONObject popMoviesJson = new JSONObject(json);
 			JSONArray moviesArray = popMoviesJson.getJSONArray("results");
 			for (int i = 0; i < moviesArray.length(); i++) {
 				JSONObject movieObject = moviesArray.getJSONObject(i);
-				MovieData movieData = new MovieData();
-				movieData.setMovieDate(movieObject.getString("release_date"));
-				movieData.setMovieTitle(movieObject.getString("title"));
-				movieData.setMoviePictureUrl(movieObject.getString("poster_path"));
-				movieData.setMovieOverview(movieObject.getString("overview"));
-				movieData.setVoteAverage(movieObject.getDouble("vote_average"));
-				moviesDataList.add(movieData);
-				
+				ContentValues values = new ContentValues();
+				values.put(MovieContract.MOVIE_ID,
+						movieObject.getInt(MovieContract.MOVIE_ID));
+				values.put(MovieContract.MOVIE_TITLE,
+						movieObject.getString(MovieContract.MOVIE_TITLE));
+				values.put(MovieContract.MOVIE_DATE,
+						movieObject.getString(MovieContract.MOVIE_DATE));
+				values.put(MovieContract.MOVIE_PICTURE_URL,
+						movieObject.getString(MovieContract.MOVIE_PICTURE_URL));
+				values.put(MovieContract.OVERVIEW,
+						movieObject.getString(MovieContract.OVERVIEW));
+				values.put(MovieContract.VOTE_AVERAGE,
+						movieObject.getDouble(MovieContract.VOTE_AVERAGE));
+				values.put(MovieContract.MOVIE_POPULARITY,
+						movieObject.getDouble(MovieContract.MOVIE_POPULARITY));
+				contentResolver.insert(MovieContract.CONTENT_URI, values);
 			}
-			// Log.d("TAG", pictureUrlList.toString());
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -101,13 +108,13 @@ public class MoviesTask extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		if (result != null & listener != null) {
-			//when finish loading data ,deliver it to adapter on MainActivity
-			listener.afterTaskFinish(moviesDataList);
+			// when finish loading data ,deliver it to adapter on MainActivity
+			listener.afterTaskFinish();
 		}
 	}
 
 	public interface onFinishListener {
-		public void afterTaskFinish(ArrayList<MovieData> moviesDataList);
+		public void afterTaskFinish();
 	}
 
 }

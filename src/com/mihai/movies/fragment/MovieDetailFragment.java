@@ -1,13 +1,11 @@
 package com.mihai.movies.fragment;
 
-import com.mihai.movies.R;
-import com.mihai.movies.adapter.MyAdapter;
-import com.mihai.movies.data.MovieData;
-import com.squareup.picasso.Picasso;
-
 import android.app.Fragment;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
-import android.graphics.Picture;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +13,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mihai.movies.R;
+import com.mihai.movies.data.MovieContract;
+import com.squareup.picasso.Picasso;
+
 public class MovieDetailFragment extends Fragment {
+	private String titleText;
+	private String pictureUrl;
+	private String movieDate;
+	private String voteAverage;
+	private String movieOverView;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -23,22 +30,37 @@ public class MovieDetailFragment extends Fragment {
 				.inflate(R.layout.fragment_detail, container, false);
 		
 		Intent intent = getActivity().getIntent();
-		MovieData movieData = (MovieData) intent.getSerializableExtra(MoviesFragment.MOVIE_BEAN);
+		//MovieData movieData = (MovieData) intent.getSerializableExtra(MoviesSQLiteHelper.MOVIE_BEAN);
+		
+		int position = intent.getIntExtra("id", -1);
+		Uri uri = ContentUris.withAppendedId(MovieContract.CONTENT_URI, position);
+		ContentResolver contentResolver = getActivity().getContentResolver();
+		
+		Cursor cursor = contentResolver.query(uri, null, null, null, null);
+		if (cursor.moveToFirst()) {
+	
+			titleText = cursor.getString(cursor.getColumnIndex(MovieContract.MOVIE_TITLE));
+			pictureUrl = cursor.getString(cursor.getColumnIndex(MovieContract.MOVIE_PICTURE_URL));
+			movieDate = cursor.getString(cursor.getColumnIndex(MovieContract.MOVIE_DATE));
+			voteAverage = cursor.getString(cursor.getColumnIndex(MovieContract.VOTE_AVERAGE));
+			movieOverView = cursor.getString(cursor.getColumnIndex(MovieContract.OVERVIEW));
+			
+		}
 		
 		TextView title = (TextView) root.findViewById(R.id.movie_title);
-		title.setText(movieData.getMovieTitle());
+		title.setText(titleText);
 		
 		ImageView moviePicture = (ImageView) root.findViewById(R.id.movie_detial_picture);		
-		Picasso.with(getActivity()).load(MyAdapter.BASE_PICTURE_URL + movieData.getMoviePictureUrl()).into(moviePicture);
+		Picasso.with(getActivity()).load(MovieContract.BASE_PICTURE_URL + pictureUrl).into(moviePicture);
 		
 		TextView dateText = (TextView) root.findViewById(R.id.release_date);
-		dateText.setText(movieData.getMovieDate());
+		dateText.setText(movieDate);
 		
 		TextView vote = (TextView) root.findViewById(R.id.vote_average);
-		vote.setText("" + movieData.getVoteAverage() + "/10");
+		vote.setText("" + voteAverage + "/10");
 		
 		TextView overViewText = (TextView) root.findViewById(R.id.over_view_text);
-		overViewText.setText(movieData.getMovieOverview());
+		overViewText.setText(movieOverView);
 		
 		return root;
 	}
