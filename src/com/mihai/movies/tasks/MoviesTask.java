@@ -19,11 +19,9 @@ import android.os.AsyncTask;
 public class MoviesTask extends AsyncTask<String, Void, String> {
 	private String moviesJsonData;
 	private Context context;
-	private onFinishListener listener;
-
-	public MoviesTask(Context context, onFinishListener listener) {
+	
+	public MoviesTask(Context context) {
 		this.context = context;
-		this.listener = listener;
 	}
 
 	@Override
@@ -103,18 +101,6 @@ public class MoviesTask extends AsyncTask<String, Void, String> {
 			e.printStackTrace();
 		}
 
-	}
-
-	@Override
-	protected void onPostExecute(String result) {
-		if (result != null & listener != null) {
-			// when finish loading data ,deliver it to adapter on MainActivity
-			listener.afterTaskFinish();
-		}
-	}
-
-	public interface onFinishListener {
-		public void afterTaskFinish();
 	}
 
 }

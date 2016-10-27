@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">what movies</string>
+    <string name="app_name">popular movies</string>
     <string name="hello_world">Hello world!</string>
     <string name="detail_name">movie detail</string>
+    <string name="refresh">刷新数据</string>
 
 </resources>
