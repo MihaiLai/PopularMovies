@@ -7,7 +7,21 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class MoviesSQLiteHelper extends SQLiteOpenHelper {
 	private static final String DB_NAME = "movies.db";
     private static final int DB_VERSION = 1;
-   
+   /*
+    * TABLE_NAME:
+    *               movies
+    *
+    * COLUMN_NAME:
+    *               _id
+    *               id
+    *               title
+    *               release_date
+    *               poster_path
+    *               vote_average
+    *               overview
+    *               popularity
+    */
+    
     
     public static final String CREATTABLE = 
     					"CREATE TABLE " + MovieContract.MOVIES 

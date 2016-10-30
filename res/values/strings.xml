@@ -5,5 +5,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="detail_name">movie detail</string>
     <string name="refresh">刷新数据</string>
+    
+    <string name="sync_account_type">popularmovies.mihai.com</string>
+    <string name="content_authority">com.mihai.movies.proivder</string>
 
 </resources>
