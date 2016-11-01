@@ -43,7 +43,7 @@ public class MoviesProvider extends ContentProvider {
 		switch (code) {
 		case MOVIE:
 			cursor = db.query(MovieContract.MOVIES, projection, selection,
-					selectionArgs, null, null, null);
+					selectionArgs, null, null, sortOrder);
 			break;
 		case MOVIE_ITEM:
 			long id = ContentUris.parseId(uri);

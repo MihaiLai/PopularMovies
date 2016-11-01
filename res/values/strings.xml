@@ -4,9 +4,17 @@
     <string name="app_name">popular movies</string>
     <string name="hello_world">Hello world!</string>
     <string name="detail_name">movie detail</string>
-    <string name="refresh">刷新数据</string>
-    
+    <string name="setting">setting</string>
     <string name="sync_account_type">popularmovies.mihai.com</string>
     <string name="content_authority">com.mihai.movies.proivder</string>
-
+    <string name="title_activity_setting">SettingActivity</string>
+    
+    <!-- Setting -->
+	<string name="pref_sort_label_popular">popular</string>
+    <string name="pref_sort_label_vote_average">vote average</string>
+    <string name="pref_sort_value_popular">popular</string>
+    <string name="pref_sort_value_vote_average">vote_average</string>
+    <string name="pref_sort_default">popular</string>
+    <string name="pref_sort_key">sort</string>
+    <string name="pref_sort_label">排序方式</string>
 </resources>

@@ -5,25 +5,33 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+
 import com.mihai.movies.R;
 import com.mihai.movies.activities.MovieDetailActivity;
 import com.mihai.movies.adapter.MyAdapter;
 import com.mihai.movies.data.MovieContract;
 import com.mihai.movies.sync.MoviesSyncAdapter;
+import com.mihai.movies.util.Util;
 
 public class MoviesFragment extends Fragment implements
-		LoaderManager.LoaderCallbacks<Cursor> {
+		LoaderManager.LoaderCallbacks<Cursor>, OnSharedPreferenceChangeListener {
 	private GridView gridView;
 	private MyAdapter adapter;
-	private static final int MVOIE_LOADER = 0;
+	private static final int MOVIE_MAIN_LOADER = 0;
+    private static final String SORT_POPULARITY = "popular";
+    private static final String SORT_VOTE_AVERAGE = "vote_average";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,14 +68,46 @@ public class MoviesFragment extends Fragment implements
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		getLoaderManager().initLoader(MVOIE_LOADER, null, this);
+		getLoaderManager().initLoader(MOVIE_MAIN_LOADER, null, this);
+		
+		SharedPreferences sp  = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		sp.registerOnSharedPreferenceChangeListener(this);
 		super.onActivityCreated(savedInstanceState);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+	}
+	@Override
+	public void onPause() {
+		super.onPause();
+		
+	}
+	@Override
+	public void onDestroy() {
+		SharedPreferences sp  = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		sp.unregisterOnSharedPreferenceChangeListener(this);
+		super.onDestroy();
 	}
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		//根据设置偏好，来决定电影的排序-热门程度/评分高低
+		String sortType = Util.getPreferenceSort(getActivity());
+		String sortOrder = null;
+		switch (sortType) {
+		case SORT_POPULARITY:
+			sortOrder = MovieContract.MOVIE_POPULARITY + " DESC LIMIT 20";
+			break;
+		case SORT_VOTE_AVERAGE:
+			sortOrder = MovieContract.VOTE_AVERAGE + " DESC LIMIT 20";
+
+		default:
+			break;
+		}
 		CursorLoader loader = new CursorLoader(getActivity(),
-				MovieContract.CONTENT_URI, null, null, null, null);
+				MovieContract.CONTENT_URI, null, null, null, sortOrder);
 		return loader;
 	}
 
@@ -81,4 +121,16 @@ public class MoviesFragment extends Fragment implements
 		// TODO Auto-generated method stub
 		adapter.swapCursor(null);
 	}
+	//当设置改变的时候更新重新调用CursorLoader，让ui更新
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		onSortChanged();	
+	}
+	
+	public void onSortChanged(){
+		Log.d("TAG", "改变了设置");
+        getLoaderManager().restartLoader(MOVIE_MAIN_LOADER,null,this);
+    }
+	
 }
